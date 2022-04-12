@@ -314,6 +314,21 @@ public class ImmutableIntArrayTest extends TestCase {
     assertThat(iia.subArray(1, 5).contains(1)).isTrue();
   }
 
+  public void testForEach() {
+    ImmutableIntArray.of().forEach(i -> fail());
+    ImmutableIntArray.of(0, 1, 3).subArray(1, 1).forEach(i -> fail());
+
+    AtomicInteger count = new AtomicInteger(0);
+    ImmutableIntArray.of(0, 1, 2, 3).forEach(i -> assertThat(i).isEqualTo(count.getAndIncrement()));
+    assertThat(count.get()).isEqualTo(4);
+  }
+
+  public void testStream() {
+    ImmutableIntArray.of().stream().forEach(i -> fail());
+    ImmutableIntArray.of(0, 1, 3).subArray(1, 1).stream().forEach(i -> fail());
+    assertThat(ImmutableIntArray.of(0, 1, 3).stream().toArray()).isEqualTo(new int[] {0, 1, 3});
+  }
+
   public void testSubArray() {
     ImmutableIntArray iia0 = ImmutableIntArray.of();
     ImmutableIntArray iia1 = ImmutableIntArray.of(5);

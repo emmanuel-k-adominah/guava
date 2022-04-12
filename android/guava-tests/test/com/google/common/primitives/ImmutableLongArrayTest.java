@@ -316,6 +316,22 @@ public class ImmutableLongArrayTest extends TestCase {
     assertThat(iia.subArray(1, 5).contains(1)).isTrue();
   }
 
+  public void testForEach() {
+    ImmutableLongArray.of().forEach(i -> fail());
+    ImmutableLongArray.of(0, 1, 3).subArray(1, 1).forEach(i -> fail());
+
+    AtomicLong count = new AtomicLong(0);
+    ImmutableLongArray.of(0, 1, 2, 3)
+        .forEach(i -> assertThat(i).isEqualTo(count.getAndIncrement()));
+    assertThat(count.get()).isEqualTo(4);
+  }
+
+  public void testStream() {
+    ImmutableLongArray.of().stream().forEach(i -> fail());
+    ImmutableLongArray.of(0, 1, 3).subArray(1, 1).stream().forEach(i -> fail());
+    assertThat(ImmutableLongArray.of(0, 1, 3).stream().toArray()).isEqualTo(new long[] {0, 1, 3});
+  }
+
   public void testSubArray() {
     ImmutableLongArray iia0 = ImmutableLongArray.of();
     ImmutableLongArray iia1 = ImmutableLongArray.of(5);
